@@ -2,15 +2,20 @@
 #include <stdio.h>
 #include <string.h>
 
-/**
- * Shoot enemies before they collect all the incriminating data!
- * The closer you are to an enemy, the more damage you do but don't get too close or you'll get killed.
- **/
+#include "params.h"
+#include "Game.h"
+
 int main()
 {
+	Game game;
+
+	Game_init(&game);
 
     // game loop
     while (1) {
+    	game.turn++;
+    	LOG_"=== Turn %d ===\n", game.turn);
+
         int x;
         int y;
         scanf("%d%d", &x, &y);
