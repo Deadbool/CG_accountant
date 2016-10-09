@@ -3,7 +3,7 @@
 cd $HOME/CodinGame/CG_accountant
 mkdir -p CG_final_file
 
-echo "/* This is the final source file for CodinGame */" > CG_final_file/tmp.c
+echo -n "" > CG_final_file/tmp.c
 
 echo "Merging params.h"
 cat src/params.h >> CG_final_file/tmp.c
@@ -12,8 +12,6 @@ cat src/params.h >> CG_final_file/tmp.c
 
 echo "Merging *.c"
 cat src/*.c >> CG_final_file/tmp.c
-
-echo "/* Merged by Deadbool */" >> CG_final_file/tmp.c
 
 grep -v '^#include "' CG_final_file/tmp.c > CG_final_file/accountant.c
 rm CG_final_file/tmp.c
