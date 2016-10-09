@@ -32,3 +32,6 @@
 *.dSYM/
 *.su
 /Debug/
+
+#CG final file
+/CG_final_file/

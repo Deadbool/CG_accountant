@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd $HOME/CodinGame/CG_accountant
+mkdir -p CG_final_file
 
 echo "/* This is the final source file for CodinGame */" > CG_final_file/tmp.c
 
