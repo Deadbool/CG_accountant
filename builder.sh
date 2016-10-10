@@ -16,7 +16,7 @@ cat src/*.c >> CG_final_file/tmp.c
 grep -v '^#include "' CG_final_file/tmp.c > CG_final_file/accountant.c
 rm CG_final_file/tmp.c
 
-echo "Compiling:"
-gcc -O0 -g3 -Wall -fmessage-length=0 CG_final_file/accountant.c -o Debug/CG_accountant
+echo "Compiling."
+gcc -O0 -g3 -Wall -fmessage-length=0 CG_final_file/accountant.c -o Debug/CG_accountant -lm
 
 #end

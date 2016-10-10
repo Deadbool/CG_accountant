@@ -2,6 +2,16 @@
 #define SRC_GAME_H_
 
 typedef struct {
+	// Wolff position
+	int x;
+	int y;
+
+	// Data
+	int dcount;
+	// TODO add data and annemies
+}Input;
+
+typedef struct {
 	int turn;
 }Game;
 
