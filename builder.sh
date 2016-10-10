@@ -8,7 +8,7 @@ echo -n "" > CG_final_file/tmp.c
 echo "Merging params.h"
 cat src/params.h >> CG_final_file/tmp.c
 
-./include_order.sh
+./include.sh
 
 echo "Merging *.c"
 cat src/*.c >> CG_final_file/tmp.c
