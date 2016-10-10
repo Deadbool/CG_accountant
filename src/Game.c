@@ -48,7 +48,7 @@ void Game_read_intpus(Game *game) {
 	}
 }
 
-void Game_set_from_inputs(Game *game) {
+inline void Game_set_from_inputs(Game *game) {
 	game->dcount = game->input.dcount;
 	game->ecount = game->input.ecount;
 	game->wolff = game->input.wolff;

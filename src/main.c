@@ -14,7 +14,7 @@ int main()
 		Game_read_intpus(&game);
 		Game_set_from_inputs(&game);
 
-		printf("MOVE 0 0\n");
+		printf("SHOOT %d\n", game.ecount-1);
 
 	}
 
