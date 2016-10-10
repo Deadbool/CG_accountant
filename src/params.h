@@ -1,3 +1,6 @@
+#ifndef PARAMS_H_
+#define PARAMS_H_
+
 //#pragma GCC optimize "O3,omit-frame-pointer,inline"
 
 #include <stdlib.h>
@@ -66,3 +69,5 @@ typedef unsigned char bool;
 
 #define MAX_DATA 100
 #define MAX_ENNEMIES 100
+
+#endif /* PARAMS_H_ */

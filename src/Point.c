@@ -11,3 +11,19 @@ inline float Point_distance(Point *a, Point *b) {
 inline float Point_angle_to(Point *point, Point *target) {
 	return (180 * atan2(target->y - point->y, target->x - point->x) / PI);
 }
+
+inline void Point_move(Point *point, float angle, float dist) {
+	double rad = DEG_TO_RAD(angle);
+	point->x = cos(rad) * dist + point->x;
+	point->y = sin(rad) * dist + point->y;
+
+	if (point->x < 0)
+		point->x = 0;
+	else if (point->x >= MAP_W)
+		point->x = MAP_W-1;
+
+	if (point->y < 0)
+		point->y = 0;
+	else if (point->y >= MAP_H)
+		point->y = MAP_H-1;
+}

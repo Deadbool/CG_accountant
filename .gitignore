@@ -33,5 +33,11 @@
 *.su
 /Debug/
 
-#CG final file
+# Eclipse
+.cproject
+.project
+/.settings/
+
+# CG final file
 /CG_final_file/
+/CG/
