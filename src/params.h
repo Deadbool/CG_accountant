@@ -30,11 +30,14 @@
 
 #define WOLFF_STEP 1000.0f
 #define ENNEMIES_RANGE 2000.0f
+#define ENNEMIES_RANGE_2 4000000.0f
 #define ENNEMIES_STEP 500.0f
+
+#define DAMAGES(dist) (round((125000.0 * pow(dist, -1.2))))
 
 #define DATA_VALUE 100.0f
 #define KILL_VALUE 10.0f
-#define FINAL_SCORE(dp, l, s) (dp * MAX(0.0f, (l - 3.0f*s)) * 3.0f)
+#define FINAL_BONUS_SCORE(data, total_life, shots) (data * MAX(0.0f, (total_life - 3.0f*shots)) * 3.0f)
 
 //////////////////////////
 ///////// RAND ///////////
@@ -59,8 +62,8 @@ inline int fast_rand() {
 #define LOG_ fprintf(stderr,
 typedef struct timeval timeval;
 #define SET_TIMER(timer,timeout) do { timer.tv_usec += timeout;\
-										if(timer.tv_usec >= 1000000){timer.tv_usec -= 1000000;timer.tv_sec++;}\
-									 } while(0);
+if(timer.tv_usec >= 1000000){timer.tv_usec -= 1000000;timer.tv_sec++;}\
+} while(0);
 #define TIME_TO_STOP(timer, now) (timer.tv_sec == now.tv_sec && timer.tv_usec <= now.tv_usec)
 #define MIN(a,b) (a <= b ? a : b)
 #define MAX(a,b) (a >= b ? a : b)

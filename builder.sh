@@ -3,7 +3,11 @@
 cd $HOME/CodinGame/CG_accountant
 mkdir -p CG_final_file
 
-echo -n "" > CG_final_file/tmp.c
+DATE=$(date +%d/%m/%Y)
+TIME=$(date +%H:%M)
+
+echo "/*** Merged by Deadbool the $DATE at $TIME ***/" > CG_final_file/tmp.c
+echo "" >> CG_final_file/tmp.c
 
 echo "Merging params.h"
 cat src/params.h >> CG_final_file/tmp.c

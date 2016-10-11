@@ -27,3 +27,27 @@ inline void Point_move(Point *point, float angle, float dist) {
 	else if (point->y >= MAP_H)
 		point->y = MAP_H-1;
 }
+
+inline bool Point_move_to(Point *point, Point *target, float dist) {
+	if (Point_distance2(point, target) <= dist*dist) {
+		point->x = target->x;
+		point->y = target->y;
+		return TRUE;
+	}
+
+	double rad = DEG_TO_RAD(Point_angle_to(point, target));
+	point->x = cos(rad) * dist + point->x;
+	point->y = sin(rad) * dist + point->y;
+
+	if (point->x < 0)
+		point->x = 0;
+	else if (point->x >= MAP_W)
+		point->x = MAP_W-1;
+
+	if (point->y < 0)
+		point->y = 0;
+	else if (point->y >= MAP_H)
+		point->y = MAP_H-1;
+
+	return FALSE;
+}

@@ -7,9 +7,9 @@ FILES=(
 	Point
 	Enemy
 	Data
+	Game
 	Move
 	Solution
-	Game
 )
 
 for f in "${FILES[@]}"

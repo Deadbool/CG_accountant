@@ -51,3 +51,5 @@ inline void Game_set_from_inputs(Game *game) {
 	memcpy(game->data, game->input.data, sizeof(Data)*game->dcount);
 	memcpy(game->enemies, game->input.enemies, sizeof(Ennemy)*game->ecount);
 }
+
+

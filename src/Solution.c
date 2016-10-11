@@ -37,3 +37,9 @@ inline void Solution_create_child(Solution *parent_1, Solution *parent_2, Soluti
 			child->moves[i] = parent_1->moves[i];
 	}
 }
+
+inline float Solution_score(Solution *sol, Game *game) {
+	return 0.0f;
+}
+
+
