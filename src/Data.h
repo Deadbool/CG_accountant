@@ -5,7 +5,7 @@
 
 typedef struct {
 	Point point;
-	bool dead;
+	int id;
 }Data;
 
 #endif /* SRC_DATA_H_ */

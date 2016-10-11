@@ -6,6 +6,7 @@
 typedef struct {
 	Point point;
 	int life;
+	int id;
 }Ennemy;
 
 #endif /* SRC_ENEMY_H_ */

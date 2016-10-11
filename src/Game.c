@@ -7,16 +7,11 @@ void Game_init(Game *game) {
 void Game_read_intpus(Game *game) {
 	Input *in = &game->input;
 
-	// Everything is supposed to be dead
-	in->dcount = 0;
-	for (int i=0; i < MAX_DATA; i++)
-		in->data[i].dead = TRUE;
-	in->ecount = 0;
-	for (int i=0; i < MAX_ENNEMIES; i++)
-		in->enemies[i].life = 0;
-
 	// Getting Wolff's position
 	scanf("%d%d", &in->wolff.x, &in->wolff.y);
+
+	in->dcount = 0;
+	in->ecount = 0;
 
 	// Read datas
 	int dataCount;
@@ -26,10 +21,10 @@ void Game_read_intpus(Game *game) {
 	scanf("%d", &dataCount);
 	for (int i = 0; i < dataCount; i++) {
 		scanf("%d%d%d", &dataId, &dataX, &dataY);
-		in->data[dataId].dead = FALSE;
-		in->data[dataId].point.x = dataX;
-		in->data[dataId].point.y = dataY;
-		in->dcount = MAX(in->dcount, dataId+1);
+		in->data[in->dcount].point.x = dataX;
+		in->data[in->dcount].point.y = dataY;
+		in->data[in->dcount].id = dataId;
+		in->dcount++;
 	}
 
 	// Read enemies
@@ -41,10 +36,11 @@ void Game_read_intpus(Game *game) {
 	scanf("%d", &enemyCount);
 	for (int i = 0; i < enemyCount; i++) {
 		scanf("%d%d%d%d", &enemyId, &enemyX, &enemyY, &enemyLife);
-		in->enemies[enemyId].life = enemyLife;
-		in->enemies[enemyId].point.x = enemyX;
-		in->enemies[enemyId].point.y = enemyY;
-		in->ecount = MAX(in->ecount, enemyId+1);
+		in->enemies[in->ecount].life = enemyLife;
+		in->enemies[in->ecount].point.x = enemyX;
+		in->enemies[in->ecount].point.y = enemyY;
+		in->enemies[in->ecount].id = enemyId;
+		in->ecount++;
 	}
 }
 
