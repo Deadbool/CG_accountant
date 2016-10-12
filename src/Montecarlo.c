@@ -28,8 +28,8 @@ void monte_carlo(Game *game, Move *choosen_move) {
 		tested++;
 
 		// No more time ?
-#if LOCAL_INPUTS
-		if (tested >= 150000) {
+#if MC_ITERATIONS_FIX > 0
+		if (tested >= MC_ITERATIONS_FIX) {
 #else
 		gettimeofday(&now, NULL);
 		if (TIME_TO_STOP(timer, now)) {

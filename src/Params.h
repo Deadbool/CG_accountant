@@ -10,9 +10,11 @@
 
 #define LOG_INPUTS 1
 
-#define LOCAL_INPUTS 0
+#define LOCAL_INPUTS 1
 
-#define TEST_CASE "simulation/tests/test_1.txt"
+#define MC_ITERATIONS_FIX 50000
+
+#define TEST_CASE "simulation/tests/test_9.txt"
 
 ////////////////////////////
 
