@@ -10,7 +10,7 @@
 
 #define LOG_INPUTS 1
 
-#define LOCAL_INPUTS 1
+#define LOCAL_INPUTS 0
 
 #define TEST_CASE "simulation/tests/test_1.txt"
 

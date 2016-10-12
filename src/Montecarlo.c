@@ -8,6 +8,7 @@ void monte_carlo(Game *game, Move *choosen_move) {
 
 	Move best_move, move;
 	float best_score, score;
+	int found_at = -1;
 
 	best_score = Montecarlo_try(&best_move, game);
 
@@ -21,6 +22,7 @@ void monte_carlo(Game *game, Move *choosen_move) {
 		if (score > best_score) {
 			best_move = move;
 			best_score = score;
+			found_at = tested;
 		}
 
 		tested++;
@@ -33,7 +35,7 @@ void monte_carlo(Game *game, Move *choosen_move) {
 		if (TIME_TO_STOP(timer, now)) {
 #endif
 			LOG_"Tested solutions: %d\n", tested);
-			LOG_"Score: %.2f\n", best_score);
+			LOG_"Score: %.2f found at iteration %d\n", best_score, found_at);
 
 			if (best_move.shoot) {
 				game->input.shots++;
@@ -134,7 +136,7 @@ inline float Montecarlo_try(Move *first_move, Game *game) {
 
 	int i = 0;
 	while(1) {
-		game_over = Montecarlo_play_turn(game, (i > 0) ? &move : first_move, &score);
+		game_over = !Montecarlo_play_turn(game, (i > 0) ? &move : first_move, &score);
 
 		if (game_over) {
 			Game_set_from_inputs(game);
@@ -147,8 +149,13 @@ inline float Montecarlo_try(Move *first_move, Game *game) {
 			for (int e = 0; e < game->ecount; e++)
 				total_life += game->enemies[e].life;
 
+			for (int d=0; d < game->dcount; d++)
+				score += DATA_VALUE;
+
+			float bonus = FINAL_BONUS_SCORE(game->dcount, total_life, game->shots);
 			Game_set_from_inputs(game);
-			return score + FINAL_BONUS_SCORE(game->dcount, total_life, game->shots);
+
+			return score + bonus - i;
 		}
 
 		++i;
