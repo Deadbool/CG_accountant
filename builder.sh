@@ -9,9 +9,6 @@ TIME=$(date +%H:%M)
 echo "/*** Merged by Deadbool the $DATE at $TIME ***/" > CG_final_file/tmp.c
 echo "" >> CG_final_file/tmp.c
 
-echo "Merging params.h"
-cat src/params.h >> CG_final_file/tmp.c
-
 ./include.sh
 
 echo "Merging *.c"

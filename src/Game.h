@@ -1,9 +1,9 @@
 #ifndef SRC_GAME_H_
 #define SRC_GAME_H_
 
-#include "params.h"
 #include "Data.h"
 #include "Enemy.h"
+#include "Params.h"
 
 typedef struct {
 	Point wolff;
@@ -17,6 +17,8 @@ typedef struct {
 }Input;
 
 typedef struct {
+	int turn;
+
 	Point wolff;
 	int shots;
 

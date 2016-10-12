@@ -1,7 +1,7 @@
 #ifndef SRC_POINT_H_
 #define SRC_POINT_H_
 
-#include "params.h"
+#include "Params.h"
 
 typedef struct {
 	float x;

@@ -1,9 +1,9 @@
 #include "Montecarlo.h"
 
-void monte_carlo(Game *game) {
+void monte_carlo(Game *game, Move *choosen_move) {
 	timeval timer, now;
 	gettimeofday(&timer, NULL);
-	SET_TIMER(timer, TIMEOUT)
+	SET_TIMER(timer, (game->turn > 0) ? TIMEOUT : START_TIMEOUT);
 	int tested = 0;
 
 	Move best_move, move;
@@ -38,6 +38,9 @@ void monte_carlo(Game *game) {
 				Point_move(&game->wolff, best_move.angle, best_move.val);
 				printf("MOVE %.0f %.0f\n", game->wolff.x, game->wolff.y);
 			}
+
+			*choosen_move = best_move;
+			Game_set_from_inputs(game);
 
 			break;
 		}

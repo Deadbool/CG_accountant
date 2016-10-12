@@ -1,9 +1,9 @@
 #ifndef SRC_SOLUTION_H_
 #define SRC_SOLUTION_H_
 
-#include "params.h"
 #include "Move.h"
 #include "Game.h"
+#include "Params.h"
 
 typedef struct {
 	Move moves[DEPTH];

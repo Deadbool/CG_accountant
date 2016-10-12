@@ -4,12 +4,15 @@
 
 FILES=(
 
+	Utils
+	Params
 	Point
 	Enemy
 	Data
 	Game
 	Move
 	Solution
+	Simulation
 	Montecarlo
 )
 

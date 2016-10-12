@@ -1,7 +1,12 @@
-#ifndef SRC_PARAMS_H_
-#define SRC_PARAMS_H_
+/*
+ * Utils.h
+ *
+ *  Created on: 12 oct. 2016
+ *      Author: nico
+ */
 
-//#pragma GCC optimize "O3,omit-frame-pointer,inline"
+#ifndef SRC_UTILS_H_
+#define SRC_UTILS_H_
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,34 +15,6 @@
 #include <time.h>
 #include <math.h>
 #include <unistd.h>
-
-/**************************
-****** CONTROL PANEL ******
-**************************/
-#define TIMEOUT 95000
-
-#define DEPTH 15
-
-#define POPULATION_SIZE 51
-#define TURNAMENT_SIZE 2
-
-#define MUTATION_PROB 0.03
-
-#define MAP_W 16000
-#define MAP_H 9000
-#define MAX_DATA 100
-#define MAX_ENNEMIES 100
-
-#define WOLFF_STEP 1000.0f
-#define ENNEMIES_RANGE 2000.0f
-#define ENNEMIES_RANGE_2 4000000.0f
-#define ENNEMIES_STEP 500.0f
-
-#define DAMAGES(dist) (round((125000.0 * pow(dist, -1.2))))
-
-#define DATA_VALUE 100.0f
-#define KILL_VALUE 10.0f
-#define FINAL_BONUS_SCORE(data, total_life, shots) (data * MAX(0.0f, (total_life - 3.0f*shots)) * 3.0f)
 
 //////////////////////////
 ///////// RAND ///////////
@@ -53,8 +30,6 @@ inline int fast_rand() {
 #define BRAND_DOUBLE(min, max) ((min) + (RAND_DOUBLE()) * ((max)-(min)))
 //////////////////////////
 
-
-// Utils
 #define PI 3.141592653589793
 #define EPSILON 0.00001f
 #define DEG_TO_RAD(deg) (deg * PI / 180.0)
@@ -72,4 +47,4 @@ typedef unsigned char bool;
 #define FALSE 0
 #define NONE -1
 
-#endif /* SRC_PARAMS_H_ */
+#endif /* SRC_UTILS_H_ */

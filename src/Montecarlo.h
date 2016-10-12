@@ -1,10 +1,11 @@
 #ifndef SRC_MONTECARLO_H_
 #define SRC_MONTECARLO_H_
 
-#include "params.h"
+#include "Params.h"
 #include "Solution.h"
+#include "Simulation.h"
 
-void monte_carlo(Game *game);
+void monte_carlo(Game *game, Move *choosen_move);
 
 bool Montecarlo_play_turn(Game *game, Move *move, float *score);
 

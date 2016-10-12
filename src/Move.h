@@ -1,8 +1,8 @@
 #ifndef SRC_MOVE_H_
 #define SRC_MOVE_H_
 
-#include "params.h"
 #include "Game.h"
+#include "Params.h"
 
 #define MAX_STEP_FAVORIZATION 1.8f
 
