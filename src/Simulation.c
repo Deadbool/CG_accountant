@@ -1,6 +1,6 @@
 #include "Simulation.h"
 
-inline bool Simulation_play_turn(Game *game, Move *move) {
+inline void Simulation_play_turn(Game *game, Move *move) {
 	bool to_remove[MAX_DATA];
 	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
 
@@ -33,8 +33,8 @@ inline bool Simulation_play_turn(Game *game, Move *move) {
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
 		if (Point_distance2(&game->wolff, &game->enemies[e].point) < ENNEMIES_RANGE_2) {
-			LOG_"\n>>> GAME OVER <<<\n");
-			return FALSE;
+			LOG_">>> GAME OVER <<<\n");
+			exit(0);
 		}
 	}
 
@@ -65,7 +65,6 @@ inline bool Simulation_play_turn(Game *game, Move *move) {
 	}
 
 	Simulation_output(game);
-	return TRUE;
 }
 
 void Simulation_output(Game *game) {

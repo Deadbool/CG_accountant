@@ -26,8 +26,12 @@ void monte_carlo(Game *game, Move *choosen_move) {
 		tested++;
 
 		// No more time ?
+#if LOCAL_INPUTS
+		if (tested >= 150000) {
+#else
 		gettimeofday(&now, NULL);
-		if TIME_TO_STOP(timer, now) {
+		if (TIME_TO_STOP(timer, now)) {
+#endif
 			LOG_"Tested solutions: %d\n", tested);
 			LOG_"Score: %.2f\n", best_score);
 
@@ -134,7 +138,7 @@ inline float Montecarlo_try(Move *first_move, Game *game) {
 
 		if (game_over) {
 			Game_set_from_inputs(game);
-			return 0.0f;
+			return -MAX_SCORE + i * 9999.0f;
 		}
 
 		// End of the game if no more data or no more enemies

@@ -3,7 +3,7 @@
 
 #include "Game.h"
 
-bool Simulation_play_turn(Game *game, Move *move);
+void Simulation_play_turn(Game *game, Move *move);
 
 void Simulation_output(Game *game);
 
