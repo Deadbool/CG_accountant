@@ -4,8 +4,8 @@
 #include "params.h"
 
 typedef struct {
-	int x;
-	int y;
+	float x;
+	float y;
 }Point;
 
 float Point_distance2(Point *a, Point *b);

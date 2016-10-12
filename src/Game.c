@@ -1,14 +1,14 @@
 #include "Game.h"
 
 void Game_init(Game *game) {
-
+	game->input.shots = 0;
 }
 
 void Game_read_intpus(Game *game) {
 	Input *in = &game->input;
 
 	// Getting Wolff's position
-	scanf("%d%d", &in->wolff.x, &in->wolff.y);
+	scanf("%f%f", &in->wolff.x, &in->wolff.y);
 
 	in->dcount = 0;
 	in->ecount = 0;
@@ -48,6 +48,7 @@ inline void Game_set_from_inputs(Game *game) {
 	game->dcount = game->input.dcount;
 	game->ecount = game->input.ecount;
 	game->wolff = game->input.wolff;
+	game->shots = game->input.shots;
 	memcpy(game->data, game->input.data, sizeof(Data)*game->dcount);
 	memcpy(game->enemies, game->input.enemies, sizeof(Ennemy)*game->ecount);
 }

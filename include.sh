@@ -10,6 +10,7 @@ FILES=(
 	Game
 	Move
 	Solution
+	Montecarlo
 )
 
 for f in "${FILES[@]}"

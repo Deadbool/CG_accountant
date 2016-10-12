@@ -14,8 +14,8 @@ inline float Point_angle_to(Point *point, Point *target) {
 
 inline void Point_move(Point *point, float angle, float dist) {
 	double rad = DEG_TO_RAD(angle);
-	point->x = cos(rad) * dist + point->x;
-	point->y = sin(rad) * dist + point->y;
+	point->x = (int) (cos(rad) * dist + point->x);
+	point->y = (int) sin(rad) * dist + point->y;
 
 	if (point->x < 0)
 		point->x = 0;
@@ -36,8 +36,8 @@ inline bool Point_move_to(Point *point, Point *target, float dist) {
 	}
 
 	double rad = DEG_TO_RAD(Point_angle_to(point, target));
-	point->x = cos(rad) * dist + point->x;
-	point->y = sin(rad) * dist + point->y;
+	point->x = (int) (cos(rad) * dist + point->x);
+	point->y = (int) (sin(rad) * dist + point->y);
 
 	if (point->x < 0)
 		point->x = 0;

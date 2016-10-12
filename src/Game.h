@@ -7,6 +7,7 @@
 
 typedef struct {
 	Point wolff;
+	int shots;
 
 	int dcount;
 	Data data[MAX_DATA];
@@ -17,6 +18,7 @@ typedef struct {
 
 typedef struct {
 	Point wolff;
+	int shots;
 
 	int dcount;
 	Data data[MAX_DATA];
