@@ -12,9 +12,9 @@
 
 #define LOCAL_INPUTS 1
 
-#define MC_ITERATIONS_FIX 50000
+#define MC_ITERATIONS_FIX 0
 
-#define TEST_CASE "simulation/tests/test_9.txt"
+#define TEST_CASE "simulation/tests/custom.txt"
 
 ////////////////////////////
 
@@ -22,7 +22,7 @@
 ****** CONTROL PANEL ******
 **************************/
 #define TIMEOUT 95000
-#define START_TIMEOUT 950000
+#define START_TIMEOUT 950000 // TODO 1s for start
 
 #define DEPTH 15
 

@@ -12,7 +12,7 @@
 /**************************
 ****** CONTROL PANEL ******
 **************************/
-#define MY_TIMEOUT 82000
+#define MY_TIMEOUT 80000
 #define HIS_TIMEOUT 55000
 
 #define DEPTH 6
@@ -838,8 +838,8 @@ inline void Game_play_turn(Game *this, Report *report, bool opponent_side, bool 
 			// Collision with a pod ?
 			for (j=i+1; j < POD_COUNT; j++) {
 				if(Unit_collision((Unit*) this->pods[i], (Unit*) this->pods[j], t, &col) &&
-					col.t + t < 1.0 && (collision_type == COLLISION_NONE || col.t < first_col.t) &&
-					!(prev_col_exist && col.t == 0.0 && col.a == previous_col.a && col.b == previous_col.b)) {
+					    (collision_type == COLLISION_NONE || col.t < first_col.t) &&
+				    	!(prev_col_exist && col.t == t && col.a == previous_col.a && col.b == previous_col.b)) {
 					collision_type = COLLISION_POD;
 					first_col = col;
 				}
@@ -847,8 +847,8 @@ inline void Game_play_turn(Game *this, Report *report, bool opponent_side, bool 
 
 			// Collision with a checkpoint ?
 			if(Unit_collision((Unit*) this->pods[i], (Unit*) this->checkpoints[this->pods[i]->next_cp_id], t, &col) &&
-				col.t + t < 1.0 && (collision_type == COLLISION_NONE || col.t < first_col.t) &&
-				!(prev_col_exist && col.t == 0.0 && col.a == previous_col.a && col.b == previous_col.b)) {
+			        (collision_type == COLLISION_NONE || col.t < first_col.t) &&
+				    !(prev_col_exist && col.t == t && col.a == previous_col.a && col.b == previous_col.b)) {
 				collision_type = COLLISION_CHECKPOINT;
 				first_col = col;
 			}
@@ -868,7 +868,7 @@ inline void Game_play_turn(Game *this, Report *report, bool opponent_side, bool 
 		} else {
 			// Moving until time t of the collision
 			for (i=0; i < POD_COUNT; i++) {
-				Pod_move(this->pods[i], first_col.t);
+				Pod_move(this->pods[i], first_col.t - t);
 				//COND_LOG_"Pod %d move to x=%d y=%d\n", i, (int) this->pods[i]->x, (int) this->pods[i]->y);
 			}
 
@@ -904,7 +904,7 @@ inline void Game_play_turn(Game *this, Report *report, bool opponent_side, bool 
 
 			prev_col_exist = true;
 			previous_col = first_col;
-			t += first_col.t;
+			t = first_col.t;
 		}
 	}
 

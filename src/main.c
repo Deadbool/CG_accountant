@@ -16,7 +16,10 @@ int main()
 		Game_read_intpus(&game);
 		Game_set_from_inputs(&game);
 
-		monte_carlo(&game, &move);
+		//monte_carlo(&game, &move);
+
+		// Test a defined move
+		Simulation_play_turn_with_defined_move(&game, 6097, 3800);
 
 		/*move.shoot = TRUE;
 		move.val = game.ecount-1;

@@ -15,6 +15,10 @@ void monte_carlo(Game *game, Move *choosen_move) {
 	// We simulate here
 	while (1) {
 
+		/*if (tested == 9188) {
+			int bk = 0;
+		}*/
+
 		// New random sol to test
 		score = Montecarlo_try(&move, game);
 

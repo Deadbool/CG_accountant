@@ -1,10 +1,3 @@
-/*
- * Utils.h
- *
- *  Created on: 12 oct. 2016
- *      Author: nico
- */
-
 #ifndef SRC_UTILS_H_
 #define SRC_UTILS_H_
 
@@ -18,7 +11,7 @@
 
 //////////////////////////
 ///////// RAND ///////////
-unsigned int g_seed = 6320430;
+unsigned int g_seed = 11587;
 int fast_rand();
 inline int fast_rand() {
 	g_seed=(214013*g_seed+2531011);
