@@ -11,7 +11,7 @@
 
 //////////////////////////
 ///////// RAND ///////////
-//unsigned int g_seed = 11587;
+// Best seed of the world: 11587;
 unsigned int g_seed = 11587;
 
 int fast_rand();

@@ -1,1 +1,2 @@
-1) Replace distance test by collision test in the case of Wolff's death
+>> There is probably a bug in score computing because on test case 32 I find a solution
+with a score of 1042 whereas I do 1620 applying it.

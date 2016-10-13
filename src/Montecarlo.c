@@ -45,7 +45,6 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 			if (best_sol.moves[0].shoot) {
 				game->input.shots++;
 				int p = (int) best_sol.moves[0].val;
-				LOG_"%d wanted but max is %d\n", p, game->ecount-1);
 				printf("SHOOT %d\n", game->enemies[p].id);
 			} else {
 				Point_move(&game->wolff, best_sol.moves[0].angle, best_sol.moves[0].val);
