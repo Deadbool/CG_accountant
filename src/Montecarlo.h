@@ -5,7 +5,7 @@
 #include "Solution.h"
 #include "Simulation.h"
 
-void monte_carlo(Game *game, Solution *choosen_sol);
+float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score);
 
 bool Montecarlo_play_turn(Game *game, Move *move, float *score);
 

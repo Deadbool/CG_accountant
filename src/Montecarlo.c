@@ -1,6 +1,6 @@
 #include "Montecarlo.h"
 
-void monte_carlo(Game *game, Solution *choosen_sol) {
+float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 	timeval timer, now;
 	gettimeofday(&timer, NULL);
 	SET_TIMER(timer, (game->turn > 0) ? TIMEOUT : START_TIMEOUT);
@@ -10,8 +10,8 @@ void monte_carlo(Game *game, Solution *choosen_sol) {
 	float best_score, score;
 	int found_at = -1;
 
-	Solution_randomize(&best_sol, game->ecount);
-	best_score = Montecarlo_try(&best_sol, game);
+	best_sol = *choosen_sol;
+	best_score = choosen_score;
 
 	// We simulate here
 	while (1) {
@@ -33,12 +33,12 @@ void monte_carlo(Game *game, Solution *choosen_sol) {
 		tested++;
 
 		// No more time ?
-#if MC_ITERATIONS_FIX > 0
+	#if MC_ITERATIONS_FIX > 0
 		if (tested >= MC_ITERATIONS_FIX) {
-#else
+	#else
 		gettimeofday(&now, NULL);
 		if (TIME_TO_STOP(timer, now)) {
-#endif
+	#endif
 			LOG_"Tested solutions: %d\n", tested);
 			LOG_"Score: %.2f found at iteration %d\n", best_score, found_at);
 
@@ -53,7 +53,7 @@ void monte_carlo(Game *game, Solution *choosen_sol) {
 			*choosen_sol = best_sol;
 			Game_set_from_inputs(game);
 
-			break;
+			return best_score;
 		}
 	}
 }

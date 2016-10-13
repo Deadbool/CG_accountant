@@ -10,13 +10,19 @@ int main()
 	Game_init(&game);
 
 	Solution sol;
+	float score = -(MAX_SCORE * 2);
+	for (int i=0; i < MAX_DEPTH; i++) {
+		sol.moves[i].shoot = FALSE;
+		sol.moves[i].val = 0.0f;
+		sol.moves[i].angle = 0.0f;
+	}
 
 	while (1) {
 
 		Game_read_intpus(&game);
 		Game_set_from_inputs(&game);
 
-		monte_carlo(&game, &sol);
+		score = monte_carlo(&game, &sol, score);
 
 		#if LOG_SOLUTION
 			for (int i=0; i < sol.size; i++) {
@@ -40,6 +46,12 @@ int main()
 				exit(0);
 			}
 		#endif
+
+		// Shift the solution for next turn
+		memcpy(sol.moves, &sol.moves[1], sizeof(Move) * (sol.size - 1));
+		sol.moves[sol.size - 1].shoot = FALSE;
+		sol.moves[sol.size - 1].val = 0.0f;
+		sol.moves[sol.size - 1].angle = 0.0f;
 
 		game.turn++;
 	}

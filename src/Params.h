@@ -16,7 +16,7 @@
 
 #define MC_ITERATIONS_FIX 0
 
-#define TEST_CASE "simulation/tests/custom.txt"
+#define TEST_CASE "simulation/tests/test_6.txt"
 
 ////////////////////////////
 
@@ -26,7 +26,7 @@
 #define TIMEOUT 95000
 #define START_TIMEOUT 950000
 
-#define MAX_DEPTH 200
+#define MAX_DEPTH 100
 
 #define POPULATION_SIZE 51
 #define TURNAMENT_SIZE 2
