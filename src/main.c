@@ -22,6 +22,8 @@ int main()
 		Game_read_intpus(&game);
 		Game_set_from_inputs(&game);
 
+		LOG_"Seed: %d\n", g_seed);
+
 		score = monte_carlo(&game, &sol, score);
 
 		#if LOG_SOLUTION
@@ -48,7 +50,7 @@ int main()
 		#endif
 
 		// Shift the solution for next turn
-		memcpy(sol.moves, &sol.moves[1], sizeof(Move) * (sol.size - 1));
+		memmove(sol.moves, &sol.moves[1], sizeof(Move) * (sol.size - 1));
 		sol.moves[sol.size - 1].shoot = FALSE;
 		sol.moves[sol.size - 1].val = 0.0f;
 		sol.moves[sol.size - 1].angle = 0.0f;

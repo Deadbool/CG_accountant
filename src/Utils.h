@@ -11,7 +11,9 @@
 
 //////////////////////////
 ///////// RAND ///////////
+//unsigned int g_seed = 11587;
 unsigned int g_seed = 11587;
+
 int fast_rand();
 inline int fast_rand() {
 	g_seed=(214013*g_seed+2531011);

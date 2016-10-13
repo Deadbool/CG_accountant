@@ -44,7 +44,9 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 
 			if (best_sol.moves[0].shoot) {
 				game->input.shots++;
-				printf("SHOOT %d\n", game->enemies[(int) best_sol.moves[0].val].id);
+				int p = (int) best_sol.moves[0].val;
+				LOG_"%d wanted but max is %d\n", p, game->ecount-1);
+				printf("SHOOT %d\n", game->enemies[p].id);
 			} else {
 				Point_move(&game->wolff, best_sol.moves[0].angle, best_sol.moves[0].val);
 				printf("MOVE %.0f %.0f\n", game->wolff.x, game->wolff.y);
@@ -114,7 +116,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 		/* 5- Kill my target if his life < 0 */
 		if (game->enemies[eid].life <= 0) {
-			memcpy(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
+			memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 			game->ecount--;
 
 			// I get points
@@ -127,8 +129,8 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 	while (i < game->dcount) {
 		if (to_remove[i]) {
 			// Remove data from the data list
-			memcpy(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memcpy(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;

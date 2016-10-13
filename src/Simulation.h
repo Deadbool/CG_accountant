@@ -2,6 +2,7 @@
 #define SRC_SIMULATION_H_
 
 #include "Game.h"
+#include "Solution.h"
 
 void Simulation_play_turn(Game *game, Move *move);
 

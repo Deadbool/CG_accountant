@@ -47,7 +47,7 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 
 		/* 5- Kill my target if his life < 0 */
 		if (game->enemies[eid].life <= 0) {
-			memcpy(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
+			memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 			game->ecount--;
 		}
 	}
@@ -57,8 +57,8 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 	while (i < game->dcount) {
 		if (to_remove[i]) {
 			// Remove data from the data list
-			memcpy(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memcpy(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;
@@ -110,8 +110,8 @@ void Simulation_play_turn_with_defined_move(Game *game, int x, int y) {
 	while (i < game->dcount) {
 		if (to_remove[i]) {
 			// Remove data from the data list
-			memcpy(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memcpy(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;
@@ -151,7 +151,7 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 
 	/* 5- Kill my target if his life < 0 */
 	if (game->enemies[eid].life <= 0) {
-		memcpy(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
+		memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 		game->ecount--;
 	}
 
@@ -168,8 +168,8 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 	while (i < game->dcount) {
 		if (to_remove[i]) {
 			// Remove data from the data list
-			memcpy(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memcpy(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;
