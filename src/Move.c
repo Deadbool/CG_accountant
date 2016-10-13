@@ -7,6 +7,8 @@ inline void Move_randomize(Move *move, int ecount) {
 	} else {
 		move->shoot = FALSE;
 		move->val = RAND_DIST();
+		if (move->val > WOLFF_STEP)
+			move->val = WOLFF_STEP;
 		move->angle = RAND_ANGLE();
 	}
 }

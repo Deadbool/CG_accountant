@@ -9,32 +9,26 @@ int main()
 	Game game;
 	Game_init(&game);
 
-	Move move;
+	Solution sol;
 
 	while (1) {
 
 		Game_read_intpus(&game);
 		Game_set_from_inputs(&game);
 
-		//monte_carlo(&game, &move);
+		monte_carlo(&game, &sol);
 
-		// Test a defined move
-		Simulation_play_turn_with_defined_move(&game, 6097, 3800);
-
-		/*move.shoot = TRUE;
-		move.val = game.ecount-1;
-		move.angle = 0.0f;
-		printf("SHOOT %d\n", move.val);*/
-
-		/*move.shoot = FALSE;
-		move.val = 0.0f;
-		move.angle = 0.0f;
-		printf("MOVE %.0f %.0f\n", game.wolff.x, game.wolff.y);*/
+		#if LOG_SOLUTION
+			for (int i=0; i < sol.size; i++) {
+				LOG_"%d) shoot=%d val=%.0f angle=%.2f\n", i,
+				sol.moves[i].shoot, sol.moves[i].val, sol.moves[i].angle);
+			}
+		#endif
 
 		#if LOCAL_INPUTS
 			LOG_"\n");
 
-			Simulation_play_turn(&game, &move);
+			Simulation_play_turn(&game, &sol.moves[0]);
 
 			if(game.dcount <= 0) {
 				LOG_"*** No more data ***\n");

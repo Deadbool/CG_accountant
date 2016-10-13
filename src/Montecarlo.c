@@ -1,16 +1,17 @@
 #include "Montecarlo.h"
 
-void monte_carlo(Game *game, Move *choosen_move) {
+void monte_carlo(Game *game, Solution *choosen_sol) {
 	timeval timer, now;
 	gettimeofday(&timer, NULL);
 	SET_TIMER(timer, (game->turn > 0) ? TIMEOUT : START_TIMEOUT);
 	int tested = 0;
 
-	Move best_move, move;
+	Solution best_sol, sol;
 	float best_score, score;
 	int found_at = -1;
 
-	best_score = Montecarlo_try(&best_move, game);
+	Solution_randomize(&best_sol, game->ecount);
+	best_score = Montecarlo_try(&best_sol, game);
 
 	// We simulate here
 	while (1) {
@@ -20,11 +21,11 @@ void monte_carlo(Game *game, Move *choosen_move) {
 		}*/
 
 		// New random sol to test
-		score = Montecarlo_try(&move, game);
+		score = Montecarlo_try(&sol, game);
 
 		// Keep challenger if it's better
 		if (score > best_score) {
-			best_move = move;
+			best_sol = sol;
 			best_score = score;
 			found_at = tested;
 		}
@@ -41,15 +42,15 @@ void monte_carlo(Game *game, Move *choosen_move) {
 			LOG_"Tested solutions: %d\n", tested);
 			LOG_"Score: %.2f found at iteration %d\n", best_score, found_at);
 
-			if (best_move.shoot) {
+			if (best_sol.moves[0].shoot) {
 				game->input.shots++;
-				printf("SHOOT %d\n", game->enemies[(int) best_move.val].id);
+				printf("SHOOT %d\n", game->enemies[(int) best_sol.moves[0].val].id);
 			} else {
-				Point_move(&game->wolff, best_move.angle, best_move.val);
+				Point_move(&game->wolff, best_sol.moves[0].angle, best_sol.moves[0].val);
 				printf("MOVE %.0f %.0f\n", game->wolff.x, game->wolff.y);
 			}
 
-			*choosen_move = best_move;
+			*choosen_sol = best_sol;
 			Game_set_from_inputs(game);
 
 			break;
@@ -83,13 +84,15 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		}
 	}
 
-	/* 2- Determine my move */ // TODO Heuristic decision
+	/* 2- Determine my move */ // TODO Heuristics for decision helping
 	if (RAND_DOUBLE() < 0.5) {
 		move->shoot = TRUE;
 		move->val = RAND_INT(game->ecount);
 	} else {
 		move->shoot = FALSE;
 		move->val = RAND_DIST();
+		if (move->val > WOLFF_STEP)
+			move->val = WOLFF_STEP;
 		move->angle = RAND_ANGLE();
 
 		Point_move(&game->wolff, move->angle, move->val);
@@ -97,7 +100,8 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
-		if (Point_distance2(&game->wolff, &game->enemies[e].point) < ENNEMIES_RANGE_2)
+		// Wolff is static so we just have to verify the gap between him and enemies
+		if (Point_distance2(&game->wolff, &game->enemies[e].point) <= ENNEMIES_RANGE_2)
 			return FALSE;
 	}
 
@@ -133,18 +137,18 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 	return TRUE;
 }
 
-inline float Montecarlo_try(Move *first_move, Game *game) {
-	Move move;
+inline float Montecarlo_try(Solution *sol, Game *game) {
 	bool game_over = FALSE;
 	float score = 0.0f;
+	sol->size = 0;
 
-	int i = 0;
-	while(1) {
-		game_over = !Montecarlo_play_turn(game, (i > 0) ? &move : first_move, &score);
+	for (int t=0; t < MAX_DEPTH; t++) {
+		game_over = !Montecarlo_play_turn(game, &sol->moves[t], &score);
+		sol->size++;
 
 		if (game_over) {
 			Game_set_from_inputs(game);
-			return -MAX_SCORE + i * 9999.0f;
+			return -MAX_SCORE + t * 9999.0f;
 		}
 
 		// End of the game if no more data or no more enemies
@@ -159,9 +163,9 @@ inline float Montecarlo_try(Move *first_move, Game *game) {
 			float bonus = FINAL_BONUS_SCORE(game->dcount, total_life, game->shots);
 			Game_set_from_inputs(game);
 
-			return score + bonus - i;
+			return score + bonus - t;
 		}
-
-		++i;
 	}
+
+	return -MAX_SCORE - 10.0f;
 }

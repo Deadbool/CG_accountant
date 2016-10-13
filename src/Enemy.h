@@ -9,4 +9,6 @@ typedef struct {
 	int id;
 }Ennemy;
 
+bool Enemy_will_kill_wolff(Point *e, Point *w, float evx, float evy, float wvx, float wvy);
+
 #endif /* SRC_ENEMY_H_ */

@@ -1,13 +1,14 @@
 #include "Solution.h"
 
-inline void Solution_randomize(Solution *sol, int dcount) {
-	for (int i=0; i < DEPTH; i++)
-		Move_randomize(&sol->moves[i], dcount);
+inline void Solution_randomize(Solution *sol, int ecount) {
+	for (int i=0; i < MAX_DEPTH; i++)
+		Move_randomize(&sol->moves[i], ecount);
 }
 
 inline void Solution_create_child(Solution *parent_1, Solution *parent_2, Solution *child, int ecount) {
-	int c1 = RAND_INT(DEPTH);
-	int c2 = RAND_INT(DEPTH);
+	int size = MIN(parent_1->size, parent_2->size);
+	int c1 = RAND_INT(size);
+	int c2 = RAND_INT(size);
 
 	if (c2 < c1) {
 		int t = c2;
@@ -30,12 +31,14 @@ inline void Solution_create_child(Solution *parent_1, Solution *parent_2, Soluti
 			child->moves[i] = parent_2->moves[i];
 	}
 
-	for (int i=c2; i < DEPTH; i++) {
+	for (int i=c2; i < size; i++) {
 		if (RAND_DOUBLE() < MUTATION_PROB)
 			Move_randomize(&child->moves[i], ecount);
 		else
 			child->moves[i] = parent_1->moves[i];
 	}
+
+	child->size = size;
 }
 
 

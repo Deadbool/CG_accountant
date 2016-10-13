@@ -3,14 +3,16 @@
 
 #include "Utils.h"
 
-//#pragma GCC optimize "O3,omit-frame-pointer,inline"
+#pragma GCC optimize "O3,omit-frame-pointer,inline"
 
 ////////////////////////////
 /////////// DEBUG //////////
 
 #define LOG_INPUTS 1
 
-#define LOCAL_INPUTS 1
+#define LOG_SOLUTION 1
+
+#define LOCAL_INPUTS 0
 
 #define MC_ITERATIONS_FIX 0
 
@@ -22,9 +24,9 @@
 ****** CONTROL PANEL ******
 **************************/
 #define TIMEOUT 95000
-#define START_TIMEOUT 950000 // TODO 1s for start
+#define START_TIMEOUT 950000
 
-#define DEPTH 15
+#define MAX_DEPTH 200
 
 #define POPULATION_SIZE 51
 #define TURNAMENT_SIZE 2

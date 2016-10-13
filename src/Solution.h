@@ -6,7 +6,8 @@
 #include "Params.h"
 
 typedef struct {
-	Move moves[DEPTH];
+	int size;
+	Move moves[MAX_DEPTH];
 }Solution;
 
 void Solution_randomize(Solution *sol, int dcount);
