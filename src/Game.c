@@ -2,7 +2,9 @@
 
 void Game_init(Game *game) {
 	game->turn = 0;
+	game->input.total_life = 0;
 	game->input.shots = 0;
+	game->input.score = 0.0f;
 
 	#if LOCAL_INPUTS
 		FILE *test = fopen(TEST_CASE, "r");
@@ -93,6 +95,8 @@ void Game_read_intpus(Game *game) {
 		in->enemies[in->ecount].point.y = enemyY;
 		in->enemies[in->ecount].id = enemyId;
 		in->ecount++;
+
+		in->total_life += (game->turn > 0) ? 0 : enemyLife;
 	}
 
 	#if	LOG_INPUTS

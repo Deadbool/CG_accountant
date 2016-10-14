@@ -6,8 +6,11 @@
 #include "Params.h"
 
 typedef struct {
+	int total_life;
+
 	Point wolff;
 	int shots;
+	float score;
 
 	int dcount;
 	Data data[MAX_DATA];

@@ -26,7 +26,7 @@
 #define TIMEOUT 95000
 #define START_TIMEOUT 950000
 
-#define MAX_DEPTH 100
+#define MAX_DEPTH 60
 
 #define POPULATION_SIZE 51
 #define TURNAMENT_SIZE 2

@@ -22,9 +22,13 @@ int main()
 		Game_read_intpus(&game);
 		Game_set_from_inputs(&game);
 
+		if (game.turn == 0)
+			LOG_">>> Total life: %d <<<\n", game.input.total_life);
+
 		LOG_"Seed: %d\n", g_seed);
 
 		score = monte_carlo(&game, &sol, score);
+
 
 		#if LOG_SOLUTION
 			for (int i=0; i < sol.size; i++) {

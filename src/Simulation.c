@@ -145,6 +145,13 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 	}
 
 	/* 2- Move Wolff */
+	for (int i=0; i < game->ecount; i++) {
+		if (game->enemies[i].id == eid) {
+			eid = i;
+			break;
+		}
+	}
+
 	game->enemies[eid].life -= DAMAGES(Point_distance(&game->wolff, &game->enemies[eid].point));
 
 	game->shots++;

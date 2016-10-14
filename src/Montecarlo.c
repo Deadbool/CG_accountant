@@ -40,11 +40,17 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 		if (TIME_TO_STOP(timer, now)) {
 	#endif
 			LOG_"Tested solutions: %d\n", tested);
-			LOG_"Score: %.2f found at iteration %d\n", best_score, found_at);
+			LOG_"Score: %.6f found at iteration %d\n", best_score, found_at);
+			LOG_"Shots: %d\n", game->input.shots);
 
 			if (best_sol.moves[0].shoot) {
 				game->input.shots++;
+
 				int p = (int) best_sol.moves[0].val;
+
+				if (game->enemies[p].life <= DAMAGES(Point_distance(&game->wolff, &game->enemies[p].point)))
+					game->input.score += KILL_VALUE;
+
 				printf("SHOOT %d\n", game->enemies[p].id);
 			} else {
 				Point_move(&game->wolff, best_sol.moves[0].angle, best_sol.moves[0].val);
@@ -140,7 +146,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 inline float Montecarlo_try(Solution *sol, Game *game) {
 	bool game_over = FALSE;
-	float score = 0.0f;
+	float score = game->input.score;
 	sol->size = 0;
 
 	for (int t=0; t < MAX_DEPTH; t++) {
@@ -154,17 +160,14 @@ inline float Montecarlo_try(Solution *sol, Game *game) {
 
 		// End of the game if no more data or no more enemies
 		if (game->dcount <= 0 || game->ecount <= 0) {
-			int total_life = 0;
-			for (int e = 0; e < game->ecount; e++)
-				total_life += game->enemies[e].life;
-
 			for (int d=0; d < game->dcount; d++)
 				score += DATA_VALUE;
 
-			float bonus = FINAL_BONUS_SCORE(game->dcount, total_life, game->shots);
+			float bonus = FINAL_BONUS_SCORE(game->dcount, game->input.total_life, game->shots);
+
 			Game_set_from_inputs(game);
 
-			return score + bonus - t;
+			return score + bonus;
 		}
 	}
 
