@@ -1,6 +1,42 @@
-#include "Montecarlo.h"
+#include "Genetic.h"
 
-float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
+inline void Genetic_create_child(Solution *parent_1, Solution *parent_2, Solution *child, int ecount) {
+	int size = MIN(parent_1->size, parent_2->size);
+	int c1 = RAND_INT(size);
+	int c2 = RAND_INT(size);
+
+	if (c2 < c1) {
+		int t = c2;
+		c2 = c1;
+		c1 = t;
+	}
+
+	// Crossovers
+	for (int i=0; i < c1; i++) {
+		if (RAND_DOUBLE() < MUTATION_PROB)
+			Move_randomize(&child->moves[i], ecount);
+		else
+			child->moves[i] = parent_1->moves[i];
+	}
+
+	for (int i=c1; i <= c2; i++) {
+		if (RAND_DOUBLE() < MUTATION_PROB)
+			Move_randomize(&child->moves[i], ecount);
+		else
+			child->moves[i] = parent_2->moves[i];
+	}
+
+	for (int i=c2; i < size; i++) {
+		if (RAND_DOUBLE() < MUTATION_PROB)
+			Move_randomize(&child->moves[i], ecount);
+		else
+			child->moves[i] = parent_1->moves[i];
+	}
+
+	child->size = size;
+}
+#if 0
+float genetic(Game *game, Solution *choosen_sol, float choosen_score) {
 	timeval timer, now;
 	gettimeofday(&timer, NULL);
 	SET_TIMER(timer, (game->turn > 0) ? TIMEOUT : START_TIMEOUT);
@@ -21,7 +57,7 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 		}*/
 
 		// New random sol to test
-		score = Montecarlo_try(&sol, game);
+		score = Genetic_try(&sol, game);
 
 		// Keep challenger if it's better
 		if (score > best_score) {
@@ -50,15 +86,9 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 	}
 }
 
-inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
+inline bool Genetic_play_turn(Game *game, Move *move, float *score) {
 	bool to_remove[MAX_DATA];
-	int will_kill[MAX_ENNEMIES];
 	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
-
-	float distances[MAX_ENNEMIES];
-	int damages[MAX_ENNEMIES];
-
-	float shoot_prob = 0.5;
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -79,23 +109,11 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
 			to_remove[closest] = TRUE;
-			will_kill[e] = closest;
-		} else {
-			will_kill[e] = -1;
 		}
-
-		// Compute distance with Wolff
-		distances[e] = Point_distance(&game->wolff, &game->enemies[e].point);
-		damages[e] = DAMAGES(distances[e]);
-
-		// We must shoot a killable enemy
-		if (game->enemies[e].life <= damages[e])
-			shoot_prob = 0.75;
 	}
 
 	/* 2- Determine my move */ // TODO Heuristics for decision helping
-
-	if (RAND_DOUBLE() < shoot_prob) {
+	if (RAND_DOUBLE() < 0.5) {
 		move->shoot = TRUE;
 		move->val = RAND_INT(game->ecount);
 	} else {
@@ -111,21 +129,19 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
 		// Wolff is static so we just have to verify the gap between him and enemies
-		if (distances[e] <= ENNEMIES_RANGE)
+		if (Point_distance2(&game->wolff, &game->enemies[e].point) <= ENNEMIES_RANGE_2)
 			return FALSE;
 	}
 
 	/* 4- Should I shoot or not ?*/
 	if (move->shoot) {
 		int eid = (int) move->val;
-		game->enemies[eid].life -= damages[eid];
+		game->enemies[eid].life -= DAMAGES(Point_distance(&game->wolff, &game->enemies[eid].point));
 
 		game->shots++;
 
 		/* 5- Kill my target if his life < 0 */
 		if (game->enemies[eid].life <= 0) {
-			if (will_kill[eid] >= 0)
-				to_remove[will_kill[eid]] = FALSE;
 			memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 			game->ecount--;
 
@@ -149,13 +165,13 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 	return TRUE;
 }
 
-inline float Montecarlo_try(Solution *sol, Game *game) {
+inline float Genetic_try(Solution *sol, Game *game) {
 	bool game_over = FALSE;
 	float score = game->input.score;
 	sol->size = 0;
 
 	for (int t=0; t < MAX_DEPTH; t++) {
-		game_over = !Montecarlo_play_turn(game, &sol->moves[t], &score);
+		game_over = !Genetic_play_turn(game, &sol->moves[t], &score);
 		sol->size++;
 
 		if (game_over) {
@@ -178,3 +194,5 @@ inline float Montecarlo_try(Solution *sol, Game *game) {
 
 	return -MAX_SCORE - 10.0f;
 }
+
+#endif

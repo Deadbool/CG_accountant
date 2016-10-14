@@ -2,6 +2,7 @@
 
 inline void Simulation_play_turn(Game *game, Move *move) {
 	bool to_remove[MAX_DATA];
+	int will_kill[MAX_ENNEMIES];
 	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
 
 	/* 1- Ennemies move towards their targets */
@@ -23,6 +24,9 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
 			to_remove[closest] = TRUE;
+			will_kill[e] = closest;
+		} else {
+			will_kill[e] = -1;
 		}
 	}
 
@@ -47,6 +51,8 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 
 		/* 5- Kill my target if his life < 0 */
 		if (game->enemies[eid].life <= 0) {
+			if (will_kill[eid] >= 0)
+				to_remove[will_kill[eid]] = FALSE;
 			memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 			game->ecount--;
 		}
@@ -120,6 +126,7 @@ void Simulation_play_turn_with_defined_move(Game *game, int x, int y) {
 
 void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 	bool to_remove[MAX_DATA];
+	int will_kill[MAX_ENNEMIES];
 	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
 
 	/* 1- Ennemies move towards their targets */
@@ -141,6 +148,9 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
 			to_remove[closest] = TRUE;
+			will_kill[e] = closest;
+		} else {
+			will_kill[e] = -1;
 		}
 	}
 
@@ -158,6 +168,8 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 
 	/* 5- Kill my target if his life < 0 */
 	if (game->enemies[eid].life <= 0) {
+		if (will_kill[eid] >= 0)
+			to_remove[will_kill[eid]] = FALSE;
 		memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 		game->ecount--;
 	}

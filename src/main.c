@@ -29,6 +29,21 @@ int main()
 
 		score = monte_carlo(&game, &sol, score);
 
+		if (sol.moves[0].shoot) {
+			game.input.shots++;
+
+			int p = (int) sol.moves[0].val;
+
+			if (game.enemies[p].life <= DAMAGES(Point_distance(&game.wolff, &game.enemies[p].point)))
+				game.input.score += KILL_VALUE;
+
+			printf("SHOOT %d\n", game.enemies[p].id);
+		} else {
+			Point_move(&game.wolff, sol.moves[0].angle, sol.moves[0].val);
+			printf("MOVE %.0f %.0f\n", game.wolff.x, game.wolff.y);
+		}
+
+		Game_set_from_inputs(&game);
 
 		#if LOG_SOLUTION
 			for (int i=0; i < sol.size; i++) {
@@ -39,6 +54,10 @@ int main()
 
 		#if LOCAL_INPUTS
 			LOG_"\n");
+
+			/*if (sol.moves[0].shoot && sol.moves[0].val == 6) {
+				int bk = 0;
+			}*/
 
 			Simulation_play_turn(&game, &sol.moves[0]);
 

@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Params.h"
 
-#define MAX_STEP_FAVORIZATION 4.0f
+#define MAX_STEP_FAVORIZATION 6.0f
 
 #define RAND_ANGLE() BRAND_DOUBLE(0.0, 360.0)
 #define RAND_DIST() BRAND_DOUBLE(0.0, (WOLFF_STEP * MAX_STEP_FAVORIZATION)+1.0f)
