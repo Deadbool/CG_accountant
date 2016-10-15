@@ -32,7 +32,7 @@ int main()
 
 		LOG_"Seed: %d\n", g_seed);
 
-		if (game.turn == 0)
+		//if (game.turn == 0)
 		score = monte_carlo(&game, &sol, score);
 
 		if (sol.moves[0].shoot) {
@@ -61,7 +61,7 @@ int main()
 		#if LOCAL_INPUTS
 			LOG_"\n");
 
-			/*if (sol.size == 32) {
+			/*if (sol.size == 3) {
 				int bk = 0;
 			}*/
 

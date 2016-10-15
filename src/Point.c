@@ -5,7 +5,7 @@ inline float Point_distance2(Point *a, Point *b) {
 }
 
 inline float Point_distance(Point *a, Point *b) {
-	return sqrt(Point_distance2(a, b));
+	return floorf(sqrt(Point_distance2(a, b)));
 }
 
 inline float Point_angle_to(Point *point, Point *target) {

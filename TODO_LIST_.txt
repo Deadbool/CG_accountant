@@ -1,1 +1,1 @@
->> test_32: solution score != real score
+>> Test 8: FAIL because of a game engine bug during first turn.

@@ -1,0 +1,2 @@
+$('.testcase').map(function() { return this.title; }).get().map(function(c) {return c.replace(/.*score:([0-9])/, '$1')}).reduce(function(a,b){return parseInt(a)+parseInt(b);})
+$('.testcase').map(function() { return this.title; }).get().join('\n')

@@ -92,7 +92,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 		// We must shoot a killable enemy
 		if (game->enemies[e].life <= damages[e]) {
-			shoot_prob = 1.0;
+			shoot_prob = 0.75;
 			must_target = e;
 		}
 
