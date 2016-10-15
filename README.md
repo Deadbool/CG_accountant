@@ -1,3 +1,3 @@
 # CG_accountant
 
-Submit: 97% --> 12367 pts
+Submit: 100% --> 17498 pts

@@ -57,10 +57,23 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 	float distances[MAX_ENNEMIES];
 	int damages[MAX_ENNEMIES];
-	bool absolute_danger = FALSE;
 
-	float shoot_prob = 0.5;
-	int must_target = -1;
+	/*bool must_shoot = FALSE;
+	int must_target = -1;*/
+
+	/* 2 (move before ennemies)- Determine my move */ // TODO Heuristics for decision helping
+	if (RAND_DOUBLE() < 0.5) {
+		move->shoot = TRUE;
+		move->val = RAND_INT(game->ecount);
+	} else {
+		move->shoot = FALSE;
+		move->val = RAND_DIST();
+		if (move->val > WOLFF_STEP)
+			move->val = WOLFF_STEP;
+		move->angle = RAND_ANGLE();
+
+		Point_move(&game->wolff, move->angle, move->val);
+	}
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -91,30 +104,16 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		damages[e] = DAMAGES(distances[e]);
 
 		// We must shoot a killable enemy
-		if (game->enemies[e].life <= damages[e]) {
-			shoot_prob = 0.75;
+		/*if (game->enemies[e].life <= damages[e]) {
+			must_shoot = TRUE;
 			must_target = e;
-		}
-
-		// I have to run if an enemy will kill me
-		if (distances[e] <= ENNEMIES_RANGE)
-			absolute_danger = TRUE;
+		}*/
 	}
 
-	/* 2- Determine my move */ // TODO Heuristics for decision helping
-
-	if (!absolute_danger && RAND_DOUBLE() < shoot_prob) {
+	/*if (must_shoot && RAND_DOUBLE() < 0.75) {
 		move->shoot = TRUE;
 		move->val = (must_target < 0) ? RAND_INT(game->ecount) : must_target;
-	} else {
-		move->shoot = FALSE;
-		move->val = RAND_DIST();
-		if (move->val > WOLFF_STEP)
-			move->val = WOLFF_STEP;
-		move->angle = RAND_ANGLE();
-
-		Point_move(&game->wolff, move->angle, move->val);
-	}
+	}*/
 
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
