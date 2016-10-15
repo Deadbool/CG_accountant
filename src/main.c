@@ -17,6 +17,11 @@ int main()
 		sol.moves[i].angle = 0.0f;
 	}
 
+	/*game.input.total_life = 70;
+	game.input.score = 10;
+	game.input.shots = 1;
+	game.turn = 1;*/
+
 	while (1) {
 
 		Game_read_intpus(&game);

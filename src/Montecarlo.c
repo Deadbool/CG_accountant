@@ -40,7 +40,7 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 		if (TIME_TO_STOP(timer, now)) {
 	#endif
 			LOG_"Tested solutions: %d\n", tested);
-			LOG_"Score: %.6f found at iteration %d\n", best_score, found_at);
+			LOG_"Score: %.2f found at iteration %d\n", best_score, found_at);
 			LOG_"Shots: %d\n", game->input.shots);
 
 			*choosen_sol = best_sol;
@@ -51,12 +51,13 @@ float monte_carlo(Game *game, Solution *choosen_sol, float choosen_score) {
 }
 
 inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
-	bool to_remove[MAX_DATA];
+	int to_remove[MAX_DATA];
 	int will_kill[MAX_ENNEMIES];
-	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
+	memset(to_remove, 0, sizeof(int) * MAX_DATA);
 
 	float distances[MAX_ENNEMIES];
 	int damages[MAX_ENNEMIES];
+	bool absolute_danger = FALSE;
 
 	float shoot_prob = 0.5;
 
@@ -78,7 +79,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
-			to_remove[closest] = TRUE;
+			to_remove[closest]++;
 			will_kill[e] = closest;
 		} else {
 			will_kill[e] = -1;
@@ -91,11 +92,15 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		// We must shoot a killable enemy
 		if (game->enemies[e].life <= damages[e])
 			shoot_prob = 0.75;
+
+		// I have to run if an enemy will kill me
+		if (distances[e] <= ENNEMIES_RANGE)
+			absolute_danger = TRUE;
 	}
 
 	/* 2- Determine my move */ // TODO Heuristics for decision helping
 
-	if (RAND_DOUBLE() < shoot_prob) {
+	if (!absolute_danger && RAND_DOUBLE() < shoot_prob) {
 		move->shoot = TRUE;
 		move->val = RAND_INT(game->ecount);
 	} else {
@@ -125,7 +130,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		/* 5- Kill my target if his life < 0 */
 		if (game->enemies[eid].life <= 0) {
 			if (will_kill[eid] >= 0)
-				to_remove[will_kill[eid]] = FALSE;
+				to_remove[will_kill[eid]]--;
 			memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 			game->ecount--;
 

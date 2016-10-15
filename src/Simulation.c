@@ -1,9 +1,12 @@
 #include "Simulation.h"
 
 inline void Simulation_play_turn(Game *game, Move *move) {
-	bool to_remove[MAX_DATA];
+	int to_remove[MAX_DATA];
 	int will_kill[MAX_ENNEMIES];
-	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
+	memset(to_remove, 0, sizeof(int) * MAX_DATA);
+
+	float distances[MAX_ENNEMIES];
+	int damages[MAX_ENNEMIES];
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -23,11 +26,15 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
-			to_remove[closest] = TRUE;
+			to_remove[closest]++;
 			will_kill[e] = closest;
 		} else {
 			will_kill[e] = -1;
 		}
+
+		// Compute distance with Wolff
+		distances[e] = Point_distance(&game->wolff, &game->enemies[e].point);
+		damages[e] = DAMAGES(distances[e]);
 	}
 
 	/* 2- Move Wolff */
@@ -36,7 +43,7 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
-		if (Point_distance2(&game->wolff, &game->enemies[e].point) < ENNEMIES_RANGE_2) {
+		if (distances[e] <= ENNEMIES_RANGE) {
 			LOG_">>> GAME OVER <<<\n");
 			exit(0);
 		}
@@ -45,14 +52,14 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 	/* 4- Should I shoot or not ?*/
 	if (move->shoot) {
 		int eid = (int) move->val;
-		game->enemies[eid].life -= DAMAGES(Point_distance(&game->wolff, &game->enemies[eid].point));
+		game->enemies[eid].life -= damages[eid];
 
 		game->shots++;
 
 		/* 5- Kill my target if his life < 0 */
 		if (game->enemies[eid].life <= 0) {
 			if (will_kill[eid] >= 0)
-				to_remove[will_kill[eid]] = FALSE;
+				to_remove[will_kill[eid]]--;
 			memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 			game->ecount--;
 		}
@@ -74,8 +81,8 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 }
 
 void Simulation_play_turn_with_defined_move(Game *game, int x, int y) {
-	bool to_remove[MAX_DATA];
-	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
+	int to_remove[MAX_DATA];
+	memset(to_remove, 0, sizeof(int) * MAX_DATA);
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -95,7 +102,7 @@ void Simulation_play_turn_with_defined_move(Game *game, int x, int y) {
 
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
-			to_remove[closest] = TRUE;
+			to_remove[closest]++;
 		}
 	}
 
@@ -125,9 +132,9 @@ void Simulation_play_turn_with_defined_move(Game *game, int x, int y) {
 }
 
 void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
-	bool to_remove[MAX_DATA];
+	int to_remove[MAX_DATA];
 	int will_kill[MAX_ENNEMIES];
-	memset(to_remove, 0, sizeof(bool) * MAX_DATA);
+	memset(to_remove, 0, sizeof(int) * MAX_DATA);
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -147,14 +154,22 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 
 		// Move the enemy
 		if (Point_move_to(&game->enemies[e].point, &game->data[closest].point, ENNEMIES_STEP)) {
-			to_remove[closest] = TRUE;
+			to_remove[closest]++;
 			will_kill[e] = closest;
 		} else {
 			will_kill[e] = -1;
 		}
 	}
 
-	/* 2- Move Wolff */
+	/* 3- Am I dead ? */
+	for (int e=0; e < game->ecount; e++) {
+		if (Point_distance2(&game->wolff, &game->enemies[e].point) < ENNEMIES_RANGE_2) {
+			LOG_">>> GAME OVER <<<\n");
+			exit(0);
+		}
+	}
+
+	/* 4- Shoot */
 	for (int i=0; i < game->ecount; i++) {
 		if (game->enemies[i].id == eid) {
 			eid = i;
@@ -169,17 +184,9 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 	/* 5- Kill my target if his life < 0 */
 	if (game->enemies[eid].life <= 0) {
 		if (will_kill[eid] >= 0)
-			to_remove[will_kill[eid]] = FALSE;
+			to_remove[will_kill[eid]]--;
 		memmove(&game->enemies[eid], &game->enemies[eid+1], sizeof(Ennemy) * (game->ecount-1-eid));
 		game->ecount--;
-	}
-
-	/* 3- Am I dead ? */
-	for (int e=0; e < game->ecount; e++) {
-		if (Point_distance2(&game->wolff, &game->enemies[e].point) < ENNEMIES_RANGE_2) {
-			LOG_">>> GAME OVER <<<\n");
-			exit(0);
-		}
 	}
 
 	/* 6- Enemies collect data points they share coordinates with */

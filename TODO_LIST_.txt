@@ -1,2 +1,1 @@
->> There is probably a bug in score computing because on test case 32 I find a solution
-with a score of 1042 whereas I do 1620 applying it.
+>> test_32: solution score != real score
