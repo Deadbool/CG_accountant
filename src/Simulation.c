@@ -71,7 +71,7 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 		if (to_remove[i]) {
 			// Remove data from the data list
 			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(int) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;
@@ -124,7 +124,7 @@ void Simulation_play_turn_with_defined_move(Game *game, int x, int y) {
 		if (to_remove[i]) {
 			// Remove data from the data list
 			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(int) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;
@@ -195,7 +195,7 @@ void Simulation_play_turn_with_defined_shot(Game *game, int eid) {
 		if (to_remove[i]) {
 			// Remove data from the data list
 			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(int) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;

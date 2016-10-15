@@ -60,6 +60,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 	bool absolute_danger = FALSE;
 
 	float shoot_prob = 0.5;
+	int must_target = -1;
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -90,8 +91,10 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		damages[e] = DAMAGES(distances[e]);
 
 		// We must shoot a killable enemy
-		if (game->enemies[e].life <= damages[e])
-			shoot_prob = 0.75;
+		if (game->enemies[e].life <= damages[e]) {
+			shoot_prob = 1.0;
+			must_target = e;
+		}
 
 		// I have to run if an enemy will kill me
 		if (distances[e] <= ENNEMIES_RANGE)
@@ -102,7 +105,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 
 	if (!absolute_danger && RAND_DOUBLE() < shoot_prob) {
 		move->shoot = TRUE;
-		move->val = RAND_INT(game->ecount);
+		move->val = (must_target < 0) ? RAND_INT(game->ecount) : must_target;
 	} else {
 		move->shoot = FALSE;
 		move->val = RAND_DIST();
@@ -145,7 +148,7 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 		if (to_remove[i]) {
 			// Remove data from the data list
 			memmove(&game->data[i], &game->data[i+1], sizeof(Data) * (game->dcount-1-i));
-			memmove(&to_remove[i], &to_remove[i+1], sizeof(bool) * (game->dcount-1-i));
+			memmove(&to_remove[i], &to_remove[i+1], sizeof(int) * (game->dcount-1-i));
 			game->dcount--;
 		} else
 			i++;

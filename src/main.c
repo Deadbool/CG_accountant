@@ -17,8 +17,8 @@ int main()
 		sol.moves[i].angle = 0.0f;
 	}
 
-	/*game.input.total_life = 70;
-	game.input.score = 10;
+	/*game.input.total_life = 115;
+	game.input.score = 0;
 	game.input.shots = 1;
 	game.turn = 1;*/
 
@@ -32,6 +32,7 @@ int main()
 
 		LOG_"Seed: %d\n", g_seed);
 
+		if (game.turn == 0)
 		score = monte_carlo(&game, &sol, score);
 
 		if (sol.moves[0].shoot) {
@@ -60,7 +61,7 @@ int main()
 		#if LOCAL_INPUTS
 			LOG_"\n");
 
-			/*if (sol.moves[0].shoot && sol.moves[0].val == 6) {
+			/*if (sol.size == 32) {
 				int bk = 0;
 			}*/
 
@@ -79,9 +80,7 @@ int main()
 
 		// Shift the solution for next turn
 		memmove(sol.moves, &sol.moves[1], sizeof(Move) * (sol.size - 1));
-		sol.moves[sol.size - 1].shoot = FALSE;
-		sol.moves[sol.size - 1].val = 0.0f;
-		sol.moves[sol.size - 1].angle = 0.0f;
+		sol.size--;
 
 		game.turn++;
 	}

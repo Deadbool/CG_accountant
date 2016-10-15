@@ -16,17 +16,17 @@
 
 #define MC_ITERATIONS_FIX 0
 
-#define TEST_CASE "simulation/tests/custom.txt"
+#define TEST_CASE "simulation/tests/test_31.txt"
 
 ////////////////////////////
 
 /**************************
 ****** CONTROL PANEL ******
 **************************/
-#define TIMEOUT 95000
-#define START_TIMEOUT 950000
+#define TIMEOUT 70000
+#define START_TIMEOUT 600000
 
-#define MAX_DEPTH 60
+#define MAX_DEPTH 50
 
 #define POPULATION_SIZE 51
 #define TURNAMENT_SIZE 2
