@@ -12,10 +12,10 @@ inline float Point_angle_to(Point *point, Point *target) {
 	return (180 * atan2(target->y - point->y, target->x - point->x) / PI);
 }
 
-inline void Point_move(Point *point, float angle, float dist) {
+inline void Point_move(Point *point, float angle, int speed) {
 	double rad = DEG_TO_RAD(angle);
-	point->x = (int) (cos(rad) * dist + point->x);
-	point->y = (int) sin(rad) * dist + point->y;
+	point->x = (int) (cos(rad) * speed + point->x);
+	point->y = (int) (sin(rad) * speed + point->y);
 
 	if (point->x < 0)
 		point->x = 0;
@@ -28,26 +28,16 @@ inline void Point_move(Point *point, float angle, float dist) {
 		point->y = MAP_H-1;
 }
 
-inline bool Point_move_to(Point *point, Point *target, float dist) {
-	float d = Point_distance(point, target);
-	if (d <= dist) {
+inline bool Point_move_to(Point *point, Point *target, int speed) {
+	float dist = Point_distance(point, target);
+	if (dist <= speed) {
 		point->x = target->x;
 		point->y = target->y;
 		return TRUE;
 	}
 
-	point->x = (int) (point->x + ((target->x - point->x) * dist / d));
-	point->y = (int) (point->y + ((target->y - point->y) * dist / d));
-
-	if (point->x < 0)
-		point->x = 0;
-	else if (point->x >= MAP_W)
-		point->x = MAP_W-1;
-
-	if (point->y < 0)
-		point->y = 0;
-	else if (point->y >= MAP_H)
-		point->y = MAP_H-1;
+	point->x = (int) (point->x + ((target->x - point->x) * speed / dist));
+	point->y = (int) (point->y + ((target->y - point->y) * speed / dist));
 
 	return FALSE;
 }

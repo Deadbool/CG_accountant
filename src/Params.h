@@ -16,7 +16,7 @@
 
 #define MC_ITERATIONS_FIX 0
 
-#define TEST_CASE "simulation/tests/test_32.txt"
+#define TEST_CASE "simulation/tests/test_9.txt"
 
 ////////////////////////////
 

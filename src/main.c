@@ -18,9 +18,9 @@ int main()
 	}
 
 	/*game.input.total_life = 115;
-	game.input.score = 0;
-	game.input.shots = 1;
-	game.turn = 1;*/
+	game.input.score = 10;
+	game.input.shots = 2;
+	game.turn = 5;*/
 
 	while (1) {
 
@@ -46,7 +46,7 @@ int main()
 			printf("SHOOT %d\n", game.enemies[p].id);
 		} else {
 			Point_move(&game.wolff, sol.moves[0].angle, sol.moves[0].val);
-			printf("MOVE %.0f %.0f\n", game.wolff.x, game.wolff.y);
+			printf("MOVE %d %d\n", game.wolff.x, game.wolff.y);
 		}
 
 		Game_set_from_inputs(&game);
@@ -61,7 +61,7 @@ int main()
 		#if LOCAL_INPUTS
 			LOG_"\n");
 
-			/*if (sol.size == 3) {
+			/*if (sol.size == 28) {
 				int bk = 0;
 			}*/
 

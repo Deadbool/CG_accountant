@@ -41,11 +41,11 @@ void Game_read_intpus(Game *game) {
 	#endif
 
 	// Getting Wolff's position
-	fscanf(f, "%f%f", &in->wolff.x, &in->wolff.y);
+	fscanf(f, "%d%d", &in->wolff.x, &in->wolff.y);
 
 	#if	LOG_INPUTS
 	LOG_"=== Inputs ===\n");
-		LOG_"%.0f %.0f\n", in->wolff.x, in->wolff.y);
+		LOG_"%d %d\n", in->wolff.x, in->wolff.y);
 	#endif
 
 	in->dcount = 0;

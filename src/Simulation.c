@@ -30,6 +30,11 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 		}
 	}
 
+	/* 2- Move Wolff */
+	if (!move->shoot) {
+		Point_move(&game->wolff, move->angle, move->val);
+	}
+
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
 		if (Point_distance(&game->wolff, &game->enemies[e].point) <= ENNEMIES_RANGE) {
@@ -199,14 +204,14 @@ void Simulation_output(Game *game) {
 	}
 
 	// Wolff's position
-	fprintf(f, "%.0f %.0f\n", game->wolff.x, game->wolff.y);
+	fprintf(f, "%d %d\n", game->wolff.x, game->wolff.y);
 
 	// Data
 	Data *d;
 	fprintf(f, "%d\n", game->dcount);
 	for (int i=0; i < game->dcount; i++) {
 		d = &game->data[i];
-		fprintf(f, "%d %.0f %.0f\n", d->id, d->point.x, d->point.y);
+		fprintf(f, "%d %d %.d\n", d->id, d->point.x, d->point.y);
 	}
 
 	// Enemies
@@ -214,7 +219,7 @@ void Simulation_output(Game *game) {
 	fprintf(f, "%d\n", game->ecount);
 	for (int i=0; i < game->ecount; i++) {
 		e = &game->enemies[i];
-		fprintf(f, "%d %.0f %.0f %d\n", e->id, e->point.x, e->point.y, e->life);
+		fprintf(f, "%d %d %d %d\n", e->id, e->point.x, e->point.y, e->life);
 	}
 
 	fclose(f);
