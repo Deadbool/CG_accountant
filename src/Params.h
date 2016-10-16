@@ -16,15 +16,15 @@
 
 #define MC_ITERATIONS_FIX 0
 
-#define TEST_CASE "simulation/tests/test_6.txt"
+#define TEST_CASE "simulation/tests/test_32.txt"
 
 ////////////////////////////
 
 /**************************
 ****** CONTROL PANEL ******
 **************************/
-#define TIMEOUT 85000
-#define START_TIMEOUT 800000
+#define TIMEOUT 95000
+#define START_TIMEOUT 950000
 
 #define MAX_DEPTH 120
 

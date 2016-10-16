@@ -5,13 +5,6 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 	int will_kill[MAX_ENNEMIES];
 	memset(to_remove, 0, sizeof(int) * MAX_DATA);
 
-	float distances[MAX_ENNEMIES];
-	int damages[MAX_ENNEMIES];
-
-	/* 2- Move Wolff */
-	if (!move->shoot)
-		Point_move(&game->wolff, move->angle, move->val);
-
 	/* 1- Ennemies move towards their targets */
 	int closest;
 	float min_dist, dist;
@@ -35,15 +28,11 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 		} else {
 			will_kill[e] = -1;
 		}
-
-		// Compute distance with Wolff
-		distances[e] = Point_distance(&game->wolff, &game->enemies[e].point);
-		damages[e] = DAMAGES(distances[e]);
 	}
 
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
-		if (distances[e] <= ENNEMIES_RANGE) {
+		if (Point_distance(&game->wolff, &game->enemies[e].point) <= ENNEMIES_RANGE) {
 			LOG_">>> GAME OVER <<<\n");
 			exit(0);
 		}
@@ -52,7 +41,7 @@ inline void Simulation_play_turn(Game *game, Move *move) {
 	/* 4- Should I shoot or not ?*/
 	if (move->shoot) {
 		int eid = (int) move->val;
-		game->enemies[eid].life -= damages[eid];
+		game->enemies[eid].life -= DAMAGES(Point_distance(&game->wolff, &game->enemies[eid].point));
 
 		game->shots++;
 

@@ -55,25 +55,11 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 	int will_kill[MAX_ENNEMIES];
 	memset(to_remove, 0, sizeof(int) * MAX_DATA);
 
-	float distances[MAX_ENNEMIES];
+	bool run_away = FALSE;
 	int damages[MAX_ENNEMIES];
 
-	/*bool must_shoot = FALSE;
-	int must_target = -1;*/
-
-	/* 2 (move before ennemies)- Determine my move */ // TODO Heuristics for decision helping
-	if (RAND_DOUBLE() < 0.5) {
-		move->shoot = TRUE;
-		move->val = RAND_INT(game->ecount);
-	} else {
-		move->shoot = FALSE;
-		move->val = RAND_DIST();
-		if (move->val > WOLFF_STEP)
-			move->val = WOLFF_STEP;
-		move->angle = RAND_ANGLE();
-
-		Point_move(&game->wolff, move->angle, move->val);
-	}
+	float shoot_prob = 0.5;
+	int must_target = -1;
 
 	/* 1- Ennemies move towards their targets */
 	int closest;
@@ -99,26 +85,37 @@ inline bool Montecarlo_play_turn(Game *game, Move *move, float *score) {
 			will_kill[e] = -1;
 		}
 
-		// Compute distance with Wolff
-		distances[e] = Point_distance(&game->wolff, &game->enemies[e].point);
-		damages[e] = DAMAGES(distances[e]);
-
-		// We must shoot a killable enemy
-		/*if (game->enemies[e].life <= damages[e]) {
-			must_shoot = TRUE;
-			must_target = e;
+		// Must shoot low life enemies
+		dist = Point_distance(&game->wolff, &game->enemies[e].point);
+		/*if (dist <= ENNEMIES_RANGE) {
+			run_away = TRUE;
+		} else {*/
+			damages[e] = DAMAGES(dist);
+			/*if (game->enemies[e].life <= damages[e]) {
+				shoot_prob = 0.75;
+				must_target = e;
+			}
 		}*/
 	}
 
-	/*if (must_shoot && RAND_DOUBLE() < 0.75) {
+	/* 2- Determine my move */ // TODO Heuristics for decision helping
+	if (!run_away && RAND_DOUBLE() < shoot_prob) {
 		move->shoot = TRUE;
 		move->val = (must_target < 0) ? RAND_INT(game->ecount) : must_target;
-	}*/
+	} else {
+		move->shoot = FALSE;
+		move->val = RAND_DIST();
+		if (move->val > WOLFF_STEP)
+			move->val = WOLFF_STEP;
+		move->angle = RAND_ANGLE();
+
+		Point_move(&game->wolff, move->angle, move->val);
+	}
 
 	/* 3- Am I dead ? */
 	for (int e=0; e < game->ecount; e++) {
 		// Wolff is static so we just have to verify the gap between him and enemies
-		if (distances[e] <= ENNEMIES_RANGE)
+		if (Point_distance2(&game->wolff, &game->enemies[e].point) <= ENNEMIES_RANGE_2)
 			return FALSE;
 	}
 
